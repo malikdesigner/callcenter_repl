@@ -1,0 +1,27 @@
+kind = "api"
+  previewPath = "/voice"
+  title = "MediFlow Voice Agent"
+  version = "1.0.0"
+  id = "voice-agent"
+
+  [[services]]
+  localPort = 8001
+  name = "Voice Agent"
+  paths = ["/voice"]
+
+  [services.development]
+  run = "python artifacts/voice-agent/main.py"
+
+  [services.development.env]
+  PORT = "8001"
+  BASE_PATH = "/voice"
+
+  [services.production]
+
+  [services.production.run]
+  args = ["python", "artifacts/voice-agent/main.py"]
+
+  [services.production.run.env]
+  PORT = "8001"
+  BASE_PATH = "/voice"
+  

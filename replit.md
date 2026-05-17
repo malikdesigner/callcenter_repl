@@ -29,9 +29,13 @@ A fully functional multi-tenant AI healthcare appointment SaaS platform. Hospita
 - `lib/api-client-react/src/generated/` — generated TanStack Query hooks + Zod schemas
 - `lib/db/src/schema/` — Drizzle ORM schema files (tenants, users, doctors, patients, appointments)
 - `artifacts/api-server/src/routes/` — Express route handlers (auth, tenants, doctors, patients, appointments, dashboard, ai)
-- `artifacts/healthcare/src/pages/` — React page components (login, dashboard, appointments, doctors, patients, ai-assistant, tenants)
+- `artifacts/healthcare/src/pages/` — React page components (login, dashboard, appointments, doctors, patients, ai-assistant, voice-call, tenants)
 - `artifacts/healthcare/src/hooks/use-auth.ts` — Zustand auth store with localStorage persistence
 - `artifacts/healthcare/src/components/layout.tsx` — sidebar nav layout
+- `artifacts/api-server/src/routes/voice.ts` — WebSocket voice handler (STT→LLM→TTS pipeline)
+- `artifacts/voice-agent/scripts/transcribe.py` — faster-whisper Urdu speech-to-text
+- `artifacts/voice-agent/scripts/tts.py` — edge-tts Urdu text-to-speech
+- `artifacts/voice-agent/README.md` — local setup guide for voice agent
 
 ## Architecture decisions
 
@@ -40,6 +44,8 @@ A fully functional multi-tenant AI healthcare appointment SaaS platform. Hospita
 - **Text columns for dates**: Appointment dates stored as `text` (YYYY-MM-DD string) rather than `date` type to avoid timezone issues. Orval generates `Date` objects from OpenAPI `format: date` — convert with `.toISOString().split("T")[0]` in route handlers.
 - **Proxy-based routing**: All traffic goes through the shared Replit proxy. API server handles `/api/*`, frontend handles `/`. No CORS proxy needed in Vite.
 - **Context-aware AI assistant**: No external LLM. The AI chat route (`/api/ai/chat`) uses rule-based pattern matching against live DB data to answer scheduling questions.
+- **Voice agent embedded in Express**: WebSocket endpoint at `/api/voice/ws` handles the full STT→LLM→TTS pipeline. Node.js manages the WebSocket; Python subprocesses (faster-whisper, edge-tts) handle audio. Ollama is called directly from Node.js via fetch. No separate service port needed.
+- **Push-to-talk protocol**: Client sends audio as raw binary chunks, then `{"type":"end_recording"}` JSON. Server responds with `transcript`, `response_text`, binary MP3 audio, then `done`.
 
 ## Product
 
@@ -49,6 +55,7 @@ A fully functional multi-tenant AI healthcare appointment SaaS platform. Hospita
 - **Doctors**: Register with specialty, availability schedule, slot duration; view/delete
 - **Patients**: Register with demographics and blood type; search by name
 - **AI Assistant**: Chat interface for natural language scheduling queries
+- **Voice Call**: Push-to-talk Urdu voice agent — speaks with the hospital AI about doctors, appointments, hours, and emergency contacts. Uses faster-whisper (STT) + Ollama (LLM) + edge-tts (TTS). Rule-based fallback when Ollama is offline.
 - **Tenants** (admin only): Create and manage hospital/clinic organizations
 
 ## Default credentials

@@ -8,6 +8,7 @@ import {
   MessageSquare,
   LogOut,
   Menu,
+  Phone,
 } from "lucide-react";
 import {
   Sidebar,
@@ -35,6 +36,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     { title: "Appointments", href: "/appointments", icon: Calendar },
     { title: "Doctors", href: "/doctors", icon: Users },
     { title: "Patients", href: "/patients", icon: Users },
+    { title: "Voice Call", href: "/voice-call", icon: Phone },
     { title: "AI Assistant", href: "/ai-assistant", icon: MessageSquare },
   ];
 

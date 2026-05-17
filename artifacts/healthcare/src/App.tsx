@@ -13,6 +13,7 @@ import DoctorsPage from "@/pages/doctors";
 import PatientsPage from "@/pages/patients";
 import AiAssistantPage from "@/pages/ai-assistant";
 import TenantsPage from "@/pages/tenants";
+import VoiceCallPage from "@/pages/voice-call";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient({
@@ -52,6 +53,9 @@ function Router() {
       </Route>
       <Route path="/ai-assistant">
         <ProtectedRoute component={AiAssistantPage} />
+      </Route>
+      <Route path="/voice-call">
+        <ProtectedRoute component={VoiceCallPage} />
       </Route>
       <Route path="/tenants">
         <ProtectedRoute component={TenantsPage} />
