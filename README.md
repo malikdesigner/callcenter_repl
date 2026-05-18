@@ -197,7 +197,7 @@ pnpm install
 Create a PostgreSQL database:
 
 ```bash
-psql -U postgres -c "CREATE DATABASE mediflow;"
+psql -U postgres -c "CREATE DATABASE ai_receptionist;"
 ```
 
 ### 4. Configure environment variables
@@ -238,7 +238,8 @@ pnpm --filter @workspace/api-spec run codegen
 
 | Variable | Required | Example | Description |
 |---|---|---|---|
-| `DATABASE_URL` | Yes | `postgresql://postgres:password@localhost:5432/mediflow` | PostgreSQL connection string |
+| `APP_DATABASE_URL` | Yes | `postgresql://postgres:password@localhost:5432/ai_receptionist` | PostgreSQL connection string (preferred) |
+| `DATABASE_URL` | Fallback | `postgresql://postgres:password@localhost:5432/ai_receptionist` | Fallback if `APP_DATABASE_URL` is not set |
 | `SESSION_SECRET` | Yes | `your-super-secret-key-here` | JWT signing secret (use a long random string) |
 | `PORT` | No | `8080` | Server port (default: `5000`) |
 | `NODE_ENV` | No | `development` | Node environment |

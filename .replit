@@ -30,3 +30,8 @@ externalPort = 3000
 [nix]
 channel = "stable-25_05"
 packages = ["ffmpeg-full"]
+
+[userenv]
+
+[userenv.shared]
+APP_DATABASE_URL = "postgresql://postgres:password@helium/ai_receptionist?sslmode=disable"
